@@ -7,25 +7,47 @@ root.geometry("300x300")
 secondTimer = False
 minuteTimer = False
 
-def change():
+def changeMinutes():
     global timerlabel, timerinput, seconds, minutes, timerseconds
     seconds -= 1
     if timerseconds != 0:
         timerseconds -= 1
     else:
         timerseconds = 59
-    if secondTimer == True:
-        if len(str(seconds)) == 1:
-            timerlabel = Label(root, text="00:0"+str(seconds))
-        else:
-            timerlabel = Label(root, text="00:"+str(seconds))
-        timerlabel.grid(row=4, column=0)
-        if seconds != 0:
-            timerlabel.after(1000, change)
-        if seconds == 0:
-            PlaySound("beep-2.wav", SND_FILENAME)
-            PlaySound("beep-2.wav", SND_FILENAME)
-            PlaySound("beep-2.wav", SND_FILENAME)
+        minutes -= 1
+    timerlabel.grid(row=4, column=0)
+    if len(str(minutes)) == 1:
+        timerlabel = Label(root, text="0" + str(minutes) + ":" + str(timerseconds))
+    elif len(str(timerseconds)) == 1 and len(str(minutes)) == 1:
+        timerlabel = Label(root, text="0" + str(minutes) + ":0" + str(timerseconds))
+    elif timerseconds == 0:
+        timerlabel = Label(root, text="0" + str(minutes) + ":0" + str(timerseconds))
+    elif len(str(timerseconds)) == 1:
+        timerlabel = Label(root, text=str(minutes) + ":0" + str(timerseconds))
+    else:
+        timerlabel = Label(root, text=str(minutes) + ":" + str(timerseconds))
+    if seconds != 0:
+        timerlabel.after(1000, changeMinutes)
+    else:
+        PlaySound("beep-2.wav", SND_FILENAME)
+        PlaySound("beep-2.wav", SND_FILENAME)
+        PlaySound("beep-2.wav", SND_FILENAME)
+
+def changeSeconds():
+    global timerlabel, timerinput, seconds, minutes, timerseconds
+    seconds -= 1
+    if len(str(seconds)) == 1:
+        timerlabel = Label(root, text="00:0"+str(seconds))
+    else:
+        timerlabel = Label(root, text="00:"+str(seconds))
+    timerlabel.grid(row=4, column=0)
+    if seconds != 0:
+        timerlabel.after(1000, changeSeconds)
+    else:
+        PlaySound("beep-2.wav", SND_FILENAME)
+        PlaySound("beep-2.wav", SND_FILENAME)
+        PlaySound("beep-2.wav", SND_FILENAME)
+        
 
 def start():
     global timerlabel, timerinput, seconds, minutes, timerseconds
@@ -40,7 +62,7 @@ def start():
             timerlabel = Label(root, text="00:"+str(seconds))
         timerlabel.grid(row=4, column=0)
         if seconds != 0:
-            timerlabel.after(1000, change)
+            timerlabel.after(1000, changeSeconds)
     if timerinput[-1] == "m":
         minuteTimer = True
         seconds = int(timerinput[:-1])*60
@@ -57,7 +79,7 @@ def start():
         else:
             timerlabel = Label(root, text=str(minutes) + ":" + str(timerseconds))
         if seconds != 0:
-            timerlabel.after(1000, change)
+            timerlabel.after(1000, changeMinutes)
         timerlabel.grid(row=4, column=0)
 
 entry = Entry(root, width=30)
