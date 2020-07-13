@@ -16,10 +16,10 @@ def changeSeconds():
             seconds -= 1
             timerlabel.after(1000, changeSeconds)
         else:
-            for i in range(2):
-                PlaySound("beep-2.wav", SND_FILENAME)
-                timerlabel = Label(root, text='')
-                timer_running = True
+            for i in range(3):
+                PlaySound("C:\\Users\\fly\\src\\timerpy\\beep-2.wav", SND_FILENAME)
+            timerlabel = Label(root, text='')
+            timer_running = True
 
 def pause():
     global timer_running
@@ -40,10 +40,12 @@ def start():
     timerinput = entry.get()
     if timerinput[-1] == "s":
         seconds = int(timerinput[:-1])
-    if timerinput[-1] == "m":
+    elif timerinput[-1] == "m":
         seconds = int(timerinput[:-1])*60
-    if timerinput[-1] == "h":
+    elif timerinput[-1] == "h":
         seconds = int(timerinput[:-1])*60*60
+    else:
+        seconds = int(timerinput)
 
     timerlabel.after(1000, changeSeconds)
 
@@ -53,7 +55,9 @@ def changeLabel():
     debug_label.grid(row=6, column=0)
 
 entry = Entry(root, width=30)
+entry.insert(END, "1h")
 entry.grid(row=2, column=0, columnspan=20)
+entry.focus_set()
 
 button = Button(root, text="Start Timer", command=start)
 button.grid(row=3, column=0, columnspan=20)
