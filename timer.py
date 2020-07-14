@@ -6,7 +6,7 @@ timer_running = True
 
 def changeSeconds():
     global seconds, timer_running
-    displayHours = seconds // 3600
+    displayHours = seconds // (60 * 60)
     displayMinutes = seconds // 60
     displaySeconds = seconds % 60
     timerlabel = Label(root, text=str(displayHours) + ':' + str(displayMinutes) + ':' + str(displaySeconds))
