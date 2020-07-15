@@ -1,8 +1,21 @@
+from pid import PidFile
 from tkinter import *
 from winsound import *
 
 root = Tk()
+
+run = True
 timer_paused = False
+old_timer_paused = timer_paused
+
+def check():
+    if timer_paused:
+        pause_button["state"] = "disabled"
+        resume_button["state"] = "normal"
+    else:
+        pause_button["state"] = "normal"
+        resume_button["state"] = "disabled"
+    
 
 def changeSeconds():
     global seconds, timer_paused
@@ -23,21 +36,21 @@ def changeSeconds():
 
 def pause():
     global timer_paused
-    if timer_paused:
-        button2["state"] = DISABLED
-        button3["state"] = NORMAL
 
+    check()
+
+    old_timer_paused = timer_paused
     timer_paused = True
 
 def resume():
     global seconds, timer_paused, timerlabel
-    if not timer_paused:
-        button2["state"] = NORMAL
-        button3["state"] = DISABLED
+
+    check()
 
     displayHours = seconds // 3600
     displayMinutes = seconds // 60
     displaySeconds = seconds % 60
+    old_timer_paused = timer_paused
     timer_paused = False
     timerlabel.after(1000, changeSeconds)
 
@@ -66,13 +79,14 @@ entry.insert(END, "1h")
 entry.grid(row=2, column=0, columnspan=20)
 entry.focus_set()
 
-button = Button(root, text="Start Timer", command=start)
-button.grid(row=3, column=0, columnspan=20)
+start_button = Button(root, text="Start Timer", command=start)
+start_button.grid(row=3, column=0, columnspan=20)
 
-button2 = Button(root, text="Pause Timer", command=pause)
-button2.grid(row=4, column=0, columnspan=20)
+pause_button = Button(root, text="Pause Timer", command=pause)
+pause_button.grid(row=4, column=0, columnspan=20)
 
-button3 = Button(root, text="Resume Timer", command=resume)
-button3.grid(row=5, column=0, columnspan=20)
+resume_button = Button(root, text="Resume Timer", command=resume)
+resume_button.grid(row=5, column=0, columnspan=20)
 
+# root.after(1, check)
 root.mainloop()
